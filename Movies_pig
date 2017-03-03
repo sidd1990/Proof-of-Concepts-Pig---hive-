@@ -1,0 +1,29 @@
+movies = LOAD '
+./home/training/Desktop/Movies_project/movies_data.txt' USING PigStorage(',') AS (ID:int, name:chararray, year:int, rating:float, duration:int);
+1. /* Find the number of movies released between 1950 and 1960.*/
+
+moviesb = filter movies by year > 1950 AND year < 1960;
+movies_all = group moviesb all;
+movies_num = foreach movies_all generate group, COUNT(moviesb); 
+
+2. /* Find the number of movies having rating more than 4.*/
+moviesr = filter movies by rating > 4;
+moviesr_all = group moviesr all;
+moviesr_num = foreach moviesr_all generate group, COUNT(moviesr);
+
+3. /* Find the movies whose rating are between 3 and 4. */
+moviesr1 = filter movies by rating > 3 AND rating < 4;
+movie_name = foreach moviesr1 generate (chararray) $1 AS names;
+
+4. /* Find the number of movies with duration more than 2 hours (7200 second) */ 
+moviesd = filter movies by duration > 7200;
+moviesd_name = foreach moviesd generate (chararray) $1 as names1;
+
+5. /* Find the list of years and number of movies released each year. */
+moviesy = group movies by year; 
+moviesy_count = foreach moviesy generate group, COUNT(movies);
+
+6. /* Find the total number of movies in the dataset. */
+moviesn = group movies by name;
+moviesn_all = group moviesn ALL;
+movie_names = foreach moviesn_all generate group, COUNT(moviesn);

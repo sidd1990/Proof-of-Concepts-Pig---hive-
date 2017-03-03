@@ -1,0 +1,19 @@
+youtube = LOAD '/home/training/Desktop/youtube_project/youtubedata.txt' AS (id:chararray, uploader:chararray, interval:int, category:chararray, duration:int, views:int, rating:float, star:int, comments:int, related:chararray);
+
+1. /*Find out the top 5 categories with maximum number of videos uploaded.*/
+
+youtube1 = group youtube by category;
+category = foreach youtube1 generate group, COUNT(youtube) AS cat_count;
+cat_count = order category by cat_count desc LIMIT 5;
+cat_count_5 = LIMIT cat_count LIMIT 5;
+
+2. /*Find out the top 10 rated videos.*/
+
+youtube2 = foreach youtube generate id, rating;
+rate_count = order youtube2 by $1 desc;
+rate_countl = LIMIT rate_count 10; 
+
+3. /* Find out the most viewed videos. */
+youtube3 = foreach youtube generate id,views;
+youtube_order = order youtube by $1 desc;
+youtube_orderl = LIMIT youtube_order 10;

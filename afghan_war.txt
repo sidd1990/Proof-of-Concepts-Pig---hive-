@@ -1,0 +1,6 @@
+war = LOAD '/home/training/NewData2/data/afghan.csv' using PigStorage(',') AS (type:chararray, category:chararray, region:chararray, attack:chararray);
+dump war;
+warx = FILTER war BY (type == 'Explosive Hazard');
+wary = filter war BY (category MATCHES 'IED.*'); 
+
+

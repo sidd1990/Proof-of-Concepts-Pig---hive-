@@ -1,0 +1,11 @@
+1. create table cust (cust_id BIGINT, Last_name String, First_name String, Age Int, Designation String) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE
+2.load data local inpath '/home/training/NewData2/data/custs' overwrite intotable cust;
+3. create table trans (taxn_id BIGINT, date_of_join STRING, cust_id BIGINT, amount FLOAT, category STRING, product STRING, state STRING, type STRING) ROW FORMAT DELIMITED FILEDS TERMINATED BY ',' STORED AS TEXTFILE;
+4. load data local inpath '/home/training/Desktop/custmrdata/txns' overwrite into table trans;
+5. create table cust_trans1 (Customer_id BIGINT, Last_name STRING, First_name STRING, Amount FLOAT);
+6. INSERT OVERWRITE TABLE cust_trans1 select c.cust_id, c.Last_name, c.First_name, t.amount FROM cust c join trans t ON (c.cust_id=t.cust_id);
+7. select Customer_id, Last_name, First_name, sum(Amount) from cust_trans1 group by Customer_id, Last_name, First_name;
+8. create table cust_trans2 like cust_trans1;
+9. INSERT OVERWRITE TABLE cust_trans2 select Customer_id, Last_name, First_name, sum(Amount) from cust_trans1 group by Customer_id, Last_name, First_name; 
+10. select * from cust_trans2 sort by Amount desc limit 10;
+

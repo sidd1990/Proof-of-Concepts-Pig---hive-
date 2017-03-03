@@ -1,0 +1,20 @@
+create table youtube_data (id STRING, uploader STRING, interval INT, Category STRING, duration INT, views INT, rating FLOAT, star INT, comments INT, related STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' STORED AS TEXTFILE;
+
+load data local inpath '/home/training/Desktop/youtube_project/youtubedata.txt' overwrite into table youtube_data;
+
+1. /*Find out the top 5 categories with maximum number of videos uploaded.*/
+
+select category, count(id) from youtube_data group by category;
+
+create table youtube_count(category STRING, count_id INT);
+
+insert overwrite table youtube_count select category, count(id) from youtube_data group by category;
+
+select * from youtube_count ORDER BY count_id desc LIMIT 5; 
+
+2./* Find out the top 10 rated videos.*/
+select id, rating from youtube_data ORDER BY rating desc LIMIT 10;
+
+3. /*Find out the most viewed videos. */
+
+select id, views from youtube_data ORDER BY views desc LIMIT 10;
